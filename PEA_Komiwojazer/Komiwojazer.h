@@ -20,6 +20,7 @@ private:
 	int* droga;
 	time_t start, stop;
 	double czas;
+	int koszt;
 
 public:
 	Komiwojazer();
@@ -33,10 +34,10 @@ public:
 	void wyswietl();
 	void wygeneruj(int);
 	void wczytaj(string);
+	void greedy();
 	void algorytmZachlanny();
 	void bruteForce();
 	void dynamicProgramming();
-	void algorytmGeneryczny();
-	void algorytmMrowkowy();
+	void testuj(int);
 };
 

@@ -20,9 +20,11 @@ BruteForce::BruteForce(int ilosc_miast, int **tablica)
 
 BruteForce::~BruteForce()
 {
-	for (int i = 0; i < ilosc_miast; i++) delete[] odleglosci[i];
-	delete[] odleglosci;
+	delete[] droga;
+	delete[] wierzcholki;
 }
+
+int BruteForce::getKoszt() { return minKoszt; }
 
 void BruteForce::print() {
 	cout << "KOSZT: " << minKoszt << endl;
@@ -50,8 +52,7 @@ void BruteForce::obliczKoszt(int *vertex, int n)
 	for (int i = 0; i <= n; i++) {
 		suma += odleglosci[vertex[i % ilosc_miast]][vertex[(i + 1) % ilosc_miast]];
 	}
-	if (minKoszt > suma)
-	{
+	if (minKoszt > suma) {
 		minKoszt = suma;
 		for (int i = 0; i <= n; i++) {
 			droga[i] = vertex[i];
@@ -61,14 +62,11 @@ void BruteForce::obliczKoszt(int *vertex, int n)
 
 void BruteForce::licz(int *vertex, int i, int n)
 {
-	if (i == n)
-	{
+	if (i == n) {
 		obliczKoszt(vertex, n);
 	}
-	else
-	{
-		for (int j = i; j <= n; j++)
-		{
+	else {
+		for (int j = i; j <= n; j++) {
 			swap((vertex + i), (vertex + j));
 			licz(vertex, i + 1, n);
 			swap((vertex + i), (vertex + j)); // przywroc tablice

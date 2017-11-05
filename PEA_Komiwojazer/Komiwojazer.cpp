@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Komiwojazer.h"
 
-using namespace std;
+
 
 #pragma region basic
 Komiwojazer::Komiwojazer()
@@ -92,12 +92,8 @@ void Komiwojazer::wczytaj(string nazwa) {
 #pragma endregion
 
 
-// ALGORYTM ZACHLANNY
-void Komiwojazer::algorytmZachlanny() {
-	// ______________________STOPER_________________________
-	start = clock();
-
-	int koszt = 0;
+void Komiwojazer::greedy() {
+	koszt = 0;
 	droga = new int[ilosc_miast];
 	int * visited = new int[ilosc_miast];
 	for (int i = 1; i < ilosc_miast; i++) {
@@ -107,10 +103,10 @@ void Komiwojazer::algorytmZachlanny() {
 	int curVertex = 0; // aktualny wierzcholek
 	int lastIteration = 0; // ostatnia pomyslna iteracja
 
-	for (int i=1; i < ilosc_miast; i++) {
+	for (int i = 1; i < ilosc_miast; i++) {
 		int minValue = INT_MAX;
 		for (int j = 1; j < ilosc_miast; j++) {
-			if (odleglosci[curVertex][j] < minValue && odleglosci[curVertex][j] != 0 && visited[j] == 0) {
+			if (odleglosci[curVertex][j] < minValue && visited[j] == 0) {
 				minValue = odleglosci[curVertex][j];
 				lastIteration = j;
 			}
@@ -121,7 +117,13 @@ void Komiwojazer::algorytmZachlanny() {
 		koszt += minValue;
 	}
 	koszt += odleglosci[curVertex][0];
+}
 
+// ALGORYTM ZACHLANNY
+void Komiwojazer::algorytmZachlanny() {
+	// ______________________STOPER_________________________
+	start = clock();
+	greedy();
 	stop = clock();
 	// ______________________STOPER_________________________
 
@@ -150,14 +152,67 @@ void Komiwojazer::bruteForce() {
 	bf->print();
 	czas = (static_cast <double> (stop - start)) / CLOCKS_PER_SEC;
 	cout << "Czas wykonania algorytmu: " << czas << endl;
+	delete bf;
 }
 
 // ALGORYTM PROGRAMOWANIE DYNAMICZNE
 void Komiwojazer::dynamicProgramming() {
 	start = clock();
 	dp = new DynamiczneProgramowanie(ilosc_miast, odleglosci);
-	cout << dp->tsphelper() << endl;
+	cout << "Koszt: " << dp->tsphelper() << endl;
 	stop = clock();
+	dp->print();
 	czas = (static_cast <double> (stop - start)) / CLOCKS_PER_SEC;
 	cout << "Czas wykonania algorytmu: " << czas << endl;
+	delete dp;
+}
+
+void Komiwojazer::testuj(int ile_testow) {
+	int miasta[1] = {21}; // instancje
+	cout << "Ilosc probek: " << ile_testow << endl;
+	for (int i = 0; i < size(miasta); i++) {
+		wygeneruj(miasta[i]);
+		double czasBF = 0;
+		double czasDP = 0;
+		double czasGreedy = 0;
+		cout << "--- Tabela wynikow dla " << miasta[i] << " instancji ---" << endl;
+		for (int j = 0; j < ile_testow; j++) {
+			// brute force
+			/*
+			start = clock();
+			bf = new BruteForce(ilosc_miast, odleglosci);
+			bf->execute();
+			stop = clock();
+			czas = (static_cast <double> (stop - start)) / CLOCKS_PER_SEC;
+			cout << "BF: " << czas << endl;
+			czasBF += czas;
+			delete bf;
+			*/
+
+			// greedy
+			start = clock();
+			greedy();
+			stop = clock();
+			czas = (static_cast <double> (stop - start)) / CLOCKS_PER_SEC;
+			cout << "Greedy: " << czas << endl;
+			czasBF += czas;
+
+			// dynamic programming
+			start = clock();
+			dp = new DynamiczneProgramowanie(ilosc_miast, odleglosci);
+			dp->tsphelper();
+			stop = clock();
+			czas = (static_cast <double> (stop - start)) / CLOCKS_PER_SEC;
+			cout << "DP: " << czas << endl;
+			czasDP += czas;
+			delete dp;
+		}
+		czasBF = czasBF / ile_testow;
+		czasGreedy = czasGreedy / ile_testow;
+		czasDP = czasDP / ile_testow;
+		cout << "\nSrednia:" << endl;
+		cout << "Algorytm BF: " << czasBF << endl;
+		cout << "Algorytm Greedy: "  << czasGreedy << endl;
+		cout << "Algorytm DP: " << czasDP << endl;
+	}
 }

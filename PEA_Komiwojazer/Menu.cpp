@@ -33,8 +33,8 @@ void Menu::menu_glowne() {
 	cout << "4. Algorytm zachlanny" << endl;
 	cout << "5. Algorytm Brute Force" << endl;
 	cout << "6. Algorytm programowania dynamicznego" << endl;
-	cout << "7. //Projekt 3" << endl;
-	cout << "8. Zakoncz" << endl;
+	cout << "7. Testy" << endl;
+	cout << "0. Zakoncz" << endl;
 	cout << endl << "---> ";
 
 	cin >> wybor_operacji;
@@ -64,12 +64,8 @@ void Menu::menu_glowne() {
 		break;
 	case 4:	/* Algorytm Zachlanny */
 		{
-			start = clock();
 			komiwojazer->algorytmZachlanny();
-			stop = clock();
-			wynik = (static_cast <double> (stop - start)) / CLOCKS_PER_SEC;
-			cout << "Czas wykonania: " << wynik << endl;
-			menu_glowne();
+			menu_glowne(); 
 		}
 		break;
 	case 5: /* Algorytm Brute Force */
@@ -84,13 +80,13 @@ void Menu::menu_glowne() {
 			menu_glowne();
 		}
 		break;
-	case 7: /* Algorytm mrowkowy */
+	case 7: /* testy */
 		{
-			//komiwojazer->algorytmMrowkowy();
+			komiwojazer->testuj(11);
 			menu_glowne();
 		}
 		break;
-	case 8: /* Zakoncz */
+	case 0: /* Zakoncz */
 		{
 			cout << "Koniec!" << endl;
 			exit(0);

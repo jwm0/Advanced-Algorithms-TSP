@@ -9,9 +9,9 @@ DynamiczneProgramowanie::DynamiczneProgramowanie(int ilosc_miast, int **tablica)
 	this->odleglosci = tablica;
 
 	n = static_cast<int>(pow(2, ilosc_miast));
-
-	g = new int*[this->ilosc_miast]; // TO FIX, KTORE SZYBSZE global czy argument
-	p = new int*[this->ilosc_miast];
+	
+	g = new int*[ilosc_miast]; 
+	p = new int*[ilosc_miast];
 	for (int i = 0; i < ilosc_miast; i++) {
 		g[i] = new int[n];
 		p[i] = new int[n];
@@ -21,21 +21,19 @@ DynamiczneProgramowanie::DynamiczneProgramowanie(int ilosc_miast, int **tablica)
 
 
 DynamiczneProgramowanie::~DynamiczneProgramowanie()
-{
-	
+{	
 	for (int i = 0; i < ilosc_miast; i++) {
-		delete[] odleglosci[i];
 		delete[] g[i];
 		delete[] p[i];
 	}
-	delete[] odleglosci;
 	delete[] g;
 	delete[] p;
 }
 
 
 int DynamiczneProgramowanie::tsp(int start, int set) {
-	int masked, mask, result = -1, temp;
+	int masked, mask, temp;
+	int result = -1;
 	if (g[start][set] != -1)
 	{
 		return g[start][set];
@@ -49,12 +47,14 @@ int DynamiczneProgramowanie::tsp(int start, int set) {
 			if (masked != set)
 			{
 				temp = odleglosci[start][x] + tsp(x, masked);
-				if (result == -1 || result > temp)
+				if (result == -1 || result > temp) {
+					p[start][set] = x;
 					result = temp;
-				p[start][set] = x;
+				}
 			}
 		}
 	}
+	
 	g[start][set] = result;
 	return result;
 }
@@ -70,11 +70,34 @@ int DynamiczneProgramowanie::tsphelper()
 		}
 	}
 
-	// init matrix g ,from distance matrix graph
+	// inicjalizacja macierzy g z odleglosciami od punktu startowego
 	for (int i = 0; i < ilosc_miast; i++)
 	{
 		g[i][0] = odleglosci[i][0];
 	}
 
 	return tsp(0, n - 2);
+}
+
+void DynamiczneProgramowanie::print() {
+	droga.push_front(0);
+	generujDroge(0, n-2);
+
+	for (int n : droga) {
+		cout << n << " -> ";
+	}
+	cout << "0" << endl;
+}
+
+void DynamiczneProgramowanie::generujDroge(int start, int set) {
+	if (p[start][set] == -1) {
+		return;
+	}
+	int x = p[start][set];
+	int mask = n - 1 - (int)pow(2, x);
+	int masked = set & mask;
+
+	//cout << x << " -> ";
+	droga.push_back(x);
+	generujDroge(x, masked);
 }

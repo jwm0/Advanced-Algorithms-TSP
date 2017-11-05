@@ -15,6 +15,8 @@ public:
 	BruteForce(int, int**);
 	~BruteForce();
 
+	int getKoszt();
+
 	void print();
 	void swap(int*, int*);
 	void obliczKoszt(int*, int);
