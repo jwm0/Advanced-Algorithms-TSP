@@ -159,7 +159,7 @@ void Komiwojazer::bruteForce() {
 void Komiwojazer::dynamicProgramming() {
 	start = clock();
 	dp = new DynamiczneProgramowanie(ilosc_miast, odleglosci);
-	cout << "Koszt: " << dp->tsphelper() << endl;
+	cout << "Koszt: " << dp->tspInit() << endl;
 	stop = clock();
 	dp->print();
 	czas = (static_cast <double> (stop - start)) / CLOCKS_PER_SEC;
@@ -168,7 +168,7 @@ void Komiwojazer::dynamicProgramming() {
 }
 
 void Komiwojazer::testuj(int ile_testow) {
-	int miasta[1] = {21}; // instancje
+	int miasta[3] = {10, 11, 12}; // instancje
 	cout << "Ilosc probek: " << ile_testow << endl;
 	for (int i = 0; i < size(miasta); i++) {
 		wygeneruj(miasta[i]);
@@ -178,7 +178,6 @@ void Komiwojazer::testuj(int ile_testow) {
 		cout << "--- Tabela wynikow dla " << miasta[i] << " instancji ---" << endl;
 		for (int j = 0; j < ile_testow; j++) {
 			// brute force
-			/*
 			start = clock();
 			bf = new BruteForce(ilosc_miast, odleglosci);
 			bf->execute();
@@ -187,7 +186,6 @@ void Komiwojazer::testuj(int ile_testow) {
 			cout << "BF: " << czas << endl;
 			czasBF += czas;
 			delete bf;
-			*/
 
 			// greedy
 			start = clock();
@@ -200,7 +198,7 @@ void Komiwojazer::testuj(int ile_testow) {
 			// dynamic programming
 			start = clock();
 			dp = new DynamiczneProgramowanie(ilosc_miast, odleglosci);
-			dp->tsphelper();
+			dp->tspInit();
 			stop = clock();
 			czas = (static_cast <double> (stop - start)) / CLOCKS_PER_SEC;
 			cout << "DP: " << czas << endl;

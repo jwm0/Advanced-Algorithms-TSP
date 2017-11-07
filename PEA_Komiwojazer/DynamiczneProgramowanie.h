@@ -18,7 +18,7 @@ public:
 	~DynamiczneProgramowanie();
 
 	int tsp(int, int);
-	int tsphelper();
+	int tspInit();
 
 	void print();
 	void generujDroge(int, int);

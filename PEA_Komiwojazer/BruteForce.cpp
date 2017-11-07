@@ -6,11 +6,12 @@ using namespace std;
 
 BruteForce::BruteForce(int ilosc_miast, int **tablica)
 {
+	// przypisanie wskaznikow dla zmiennych globalnych
 	this->ilosc_miast = ilosc_miast;
 	this->odleglosci = tablica;
 
 	minKoszt = INT_MAX;
-	droga = new int[this->ilosc_miast];
+	droga = new int[this->ilosc_miast]; // optymalna trasa
 	wierzcholki = new int[this->ilosc_miast]; // tablica wierzcholkow
 	for (int i = 0; i < ilosc_miast; i++) {
 		wierzcholki[i] = i;
