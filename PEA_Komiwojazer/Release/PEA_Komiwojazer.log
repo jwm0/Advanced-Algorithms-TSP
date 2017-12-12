@@ -1,0 +1,13 @@
+﻿  stdafx.cpp
+  BruteForce.cpp
+  DynamiczneProgramowanie.cpp
+  Komiwojazer.cpp
+Komiwojazer.cpp(59): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  main.cpp
+  Menu.cpp
+  Tabu.cpp
+Tabu.cpp(63): warning C4018: '>': signed/unsigned mismatch
+  Generating code
+  All 560 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  PEA_Komiwojazer.vcxproj -> C:\Users\Kuba\documents\visual studio 2017\Projects\PEA_Komiwojazer\Release\PEA_Komiwojazer.exe

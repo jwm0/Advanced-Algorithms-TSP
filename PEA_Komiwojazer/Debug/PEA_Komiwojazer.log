@@ -1,5 +1,13 @@
-﻿  Komiwojazer.cpp
+﻿  Skipping... (no relevant changes detected)
+  stdafx.cpp
+  Komiwojazer.cpp
 c:\users\kuba\documents\visual studio 2017\projects\pea_komiwojazer\pea_komiwojazer\komiwojazer.cpp(59): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 c:\users\kuba\documents\visual studio 2017\projects\pea_komiwojazer\pea_komiwojazer\komiwojazer.cpp(173): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  main.cpp
+  Menu.cpp
+  DynamiczneProgramowanie.cpp
+  BruteForce.cpp
   PEA_Komiwojazer.vcxproj -> C:\Users\Kuba\documents\visual studio 2017\Projects\PEA_Komiwojazer\Debug\PEA_Komiwojazer.exe
   PEA_Komiwojazer.vcxproj -> C:\Users\Kuba\documents\visual studio 2017\Projects\PEA_Komiwojazer\Debug\PEA_Komiwojazer.pdb (Partial PDB)

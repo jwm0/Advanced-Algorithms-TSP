@@ -4,6 +4,7 @@
 #include <ctime>
 #include <conio.h>
 #include "Komiwojazer.h"
+#include "Tabu.h"
 using namespace std;
 
 class Menu {

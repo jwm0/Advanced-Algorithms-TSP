@@ -7,6 +7,7 @@
 #include <algorithm> //temporary
 #include "BruteForce.h"
 #include "DynamiczneProgramowanie.h"
+#include "Tabu.h"
 
 using namespace std;
 
@@ -15,6 +16,7 @@ class Komiwojazer
 private:
 	BruteForce* bf;
 	DynamiczneProgramowanie* dp;
+	Tabu* ts;
 	int ilosc_miast;
 	int** odleglosci;
 	int* droga;
@@ -38,6 +40,7 @@ public:
 	void algorytmZachlanny();
 	void bruteForce();
 	void dynamicProgramming();
+	void tabuSearch();
 	void testuj(int);
 };
 

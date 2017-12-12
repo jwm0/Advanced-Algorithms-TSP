@@ -33,7 +33,8 @@ void Menu::menu_glowne() {
 	cout << "4. Algorytm zachlanny" << endl;
 	cout << "5. Algorytm Brute Force" << endl;
 	cout << "6. Algorytm programowania dynamicznego" << endl;
-	cout << "7. Testy" << endl;
+	cout << "7. Algorytm tabu search" << endl;
+	cout << "8. Testy" << endl;
 	cout << "0. Zakoncz" << endl;
 	cout << endl << "---> ";
 
@@ -81,6 +82,12 @@ void Menu::menu_glowne() {
 		}
 		break;
 	case 7: /* testy */
+		{
+			komiwojazer->tabuSearch();
+			menu_glowne();
+		}
+		break;
+	case 8: /* testy */
 		{
 			komiwojazer->testuj(11);
 			menu_glowne();

@@ -167,10 +167,173 @@ void Komiwojazer::dynamicProgramming() {
 	delete dp;
 }
 
+// ALGORYTM TABU SEARCH
+void Komiwojazer::tabuSearch() {
+	int wybor_operacji;
+	cout << "1. Domyslne parametry" << endl;
+	cout << "2. Wlasne parametry z losowym rozmiarem tabu" << endl;
+	cout << endl << "---> ";
+
+	cin >> wybor_operacji;
+
+	switch (wybor_operacji) {
+	case 1:
+		{
+			start = clock();
+			ts = new Tabu(ilosc_miast, odleglosci);
+			ts->startAlgorithm(10, 400, 200, 20);
+			stop = clock();
+			cout << ts->getSolutionToString(ts->najlepszeRozwiazanie, ts->minKoszt) << endl;
+			czas = (static_cast <double> (stop - start)) / CLOCKS_PER_SEC;
+			cout << "Czas wykonania algorytmu: " << czas << endl;
+			delete ts;
+		}
+		break;
+	case 2:
+		{
+			int defaultParams[] = { 10, 400, 200, 20 };
+			int wybor;
+			cout << "Podaj liczbe sasiadow: ";
+			cin >> wybor;
+			if (wybor > 0) defaultParams[1] = wybor;
+			cout << "\nPodaj liczbe iteracji bez poprawy wyniku: ";
+			cin >> wybor;
+			if (wybor > 0) defaultParams[2] = wybor;
+			cout << "\nPodaj liczbe losowo wygenerowanych drog: ";
+			cin >> wybor;
+			if (wybor > 0) defaultParams[3] = wybor;
+
+			start = clock();
+			int tabuSize[] = { 5, 10, 15, 20, 50 };
+			int bestCost = INT_MAX;
+			vector<int> bestRoute;
+			
+			for (int i = 0; i < 5; i++) {
+				ts = new Tabu(ilosc_miast, odleglosci);
+				ts->startAlgorithm(tabuSize[i], defaultParams[1], defaultParams[2], defaultParams[3]);
+				if (ts->minKoszt < bestCost) {
+					bestCost = ts->minKoszt;
+					bestRoute = ts->najlepszeRozwiazanie;
+				}
+			}
+
+			stop = clock();
+			cout << ts->getSolutionToString(bestRoute, bestCost) << endl;
+			czas = (static_cast <double> (stop - start)) / CLOCKS_PER_SEC;
+			cout << "Czas wykonania algorytmu: " << czas << endl;
+			delete ts;
+		}
+	default:
+		{
+			return;
+		}
+		break;
+	}
+
+}
+
 void Komiwojazer::testuj(int ile_testow) {
-	int miasta[3] = {10, 11, 12}; // instancje
+	string instancje[] = { "gr21", "gr48", "eil76", "br17", "kro124", "rbg443" }; // 3 tsp, 3 atsp
+	int tabuSize[] = { 1, 2, 5, 10, 20, 50, 100 };
+	int neighbourSize[] = { 5, 10, 20, 40, 100, 200, 400, 800 };
+	double sumaCzasu;
+	double sumaKosztu;
+
+	int ile_pomiarow = 5;
+
+	for (int i = 0; i < 6; i++) {
+		cout << "==== " << instancje[i] << " ====" << endl;
+		string file_name = "./Testy/" + instancje[i] + "_wyniki.txt";
+		ofstream file;
+		file.open(file_name, std::ios_base::app);
+		wczytaj(instancje[i]);
+
+		// ROZMIAR TABU
+		file << "Rozmiar tabu" << " ; " << "Sredni koszt" << " ; " << "Sredni czas" << endl;
+		for (int j = 0; j < 7; j++) {
+			cout << "== Rozmiar tabu: " << tabuSize[j] << " ==" << endl;
+			sumaCzasu = 0;
+			sumaKosztu = 0;
+			for (int k = 0; k < ile_pomiarow; k++) {
+				start = clock();
+				ts = new Tabu(ilosc_miast, odleglosci);
+				ts->startAlgorithm(tabuSize[j]);
+				stop = clock();
+				czas = (static_cast <double> (stop - start)) / CLOCKS_PER_SEC;
+				sumaCzasu += czas;
+				sumaKosztu += ts->minKoszt;
+				//cout << k << ". Koszt: " << ts->minKoszt << "	Czas: " << czas << endl;
+				delete ts;
+			}
+			file << tabuSize[j] << " ; " << sumaKosztu / ile_pomiarow << " ; " << sumaCzasu / ile_pomiarow << std::endl; //zapisujemy wyniki do plik
+		}
+
+		// ILOSC SASIADOW
+		file << "Ilosc sasiadow" << " ; " << "Sredni koszt" << " ; " << "Sredni czas" << endl;
+		for (int j = 0; j < 8; j++) {
+			cout << "== Ilosc sasiadow: " << neighbourSize[j] << " ==" << endl;
+			sumaCzasu = 0;
+			sumaKosztu = 0;
+			for (int k = 0; k < ile_pomiarow; k++) {
+				start = clock();
+				ts = new Tabu(ilosc_miast, odleglosci);
+				ts->startAlgorithm(10,neighbourSize[j]);
+				stop = clock();
+				czas = (static_cast <double> (stop - start)) / CLOCKS_PER_SEC;
+				sumaCzasu += czas;
+				sumaKosztu += ts->minKoszt;
+				//cout << k << ". Koszt: " << ts->minKoszt << "	Czas: " << czas << endl;
+				delete ts;
+			}
+			file << neighbourSize[j] << " ; " << sumaKosztu / ile_pomiarow << " ; " << sumaCzasu / ile_pomiarow << std::endl; //zapisujemy wyniki do plik
+		}
+
+		// ILOSC ITERACJI
+		file << "Ilosc iteracji" << " ; " << "Sredni koszt" << " ; " << "Sredni czas" << endl;
+		for (int j = 0; j < 8; j++) {
+			cout << "== Ilosc iteracji: " << neighbourSize[j] << " ==" << endl;
+			sumaCzasu = 0;
+			sumaKosztu = 0;
+			for (int k = 0; k < ile_pomiarow; k++) {
+				start = clock();
+				ts = new Tabu(ilosc_miast, odleglosci);
+				ts->startAlgorithm(10, 200, neighbourSize[j]);
+				stop = clock();
+				czas = (static_cast <double> (stop - start)) / CLOCKS_PER_SEC;
+				sumaCzasu += czas;
+				sumaKosztu += ts->minKoszt;
+				//cout << k << ". Koszt: " << ts->minKoszt << "	Czas: " << czas << endl;
+				delete ts;
+			}
+			file << neighbourSize[j] << " ; " << sumaKosztu / ile_pomiarow << " ; " << sumaCzasu / ile_pomiarow << std::endl; //zapisujemy wyniki do plik
+		}
+
+		// ILOSC ITERACJI DLA LOSOWYCH SASIADOW
+		file << "Ilosc iteracji dla losowych sasiadow" << " ; " << "Sredni koszt" << " ; " << "Sredni czas" << endl;
+		for (int j = 0; j < 8; j++) {
+			cout << "== Ilosc iteracji dla losowych sasiadow: " << neighbourSize[j] << " ==" << endl;
+			sumaCzasu = 0;
+			sumaKosztu = 0;
+			for (int k = 0; k < ile_pomiarow; k++) {
+				start = clock();
+				ts = new Tabu(ilosc_miast, odleglosci);
+				ts->startAlgorithm(10, 200, 100, neighbourSize[j]);
+				stop = clock();
+				czas = (static_cast <double> (stop - start)) / CLOCKS_PER_SEC;
+				sumaCzasu += czas;
+				sumaKosztu += ts->minKoszt;
+				//cout << k << ". Koszt: " << ts->minKoszt << "	Czas: " << czas << endl;
+				delete ts;
+			}
+			file << neighbourSize[j] << " ; " << sumaKosztu / ile_pomiarow << " ; " << sumaCzasu / ile_pomiarow << std::endl; //zapisujemy wyniki do plik
+		}
+
+		file.close();
+	}
+	/*
+		int miasta[3] = {10, 11, 12}; // instancje
 	cout << "Ilosc probek: " << ile_testow << endl;
-	for (int i = 0; i < size(miasta); i++) {
+	for (int i = 0; i < 3; i++) {
 		wygeneruj(miasta[i]);
 		double czasBF = 0;
 		double czasDP = 0;
@@ -213,4 +376,6 @@ void Komiwojazer::testuj(int ile_testow) {
 		cout << "Algorytm Greedy: "  << czasGreedy << endl;
 		cout << "Algorytm DP: " << czasDP << endl;
 	}
+	*/
+
 }
